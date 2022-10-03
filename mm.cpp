@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "my_timer.h"
 #include <omp.h>
-#include <iostream>
 
 #define NI 4096
 #define NJ 4096
@@ -59,13 +58,15 @@ static
 void kernel_gemm(float C[NI*NJ], float A[NI*NK], float B[NK*NJ], float alpha, float beta)
 {
   int i, j, k;
-
 // => Form C := alpha*A*B + beta*C,
 //A is NIxNK
 //B is NKxNJ
 //C is NIxNJ
 
+//tile size is chosen as 32 for the most optimised execution time
 int tileSize = 32;
+
+//number of threads set to 10 since cpu is 10 core
 omp_set_num_threads(10); 
 
 
